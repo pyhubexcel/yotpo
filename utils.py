@@ -8,9 +8,7 @@ def save_customer_history(customer_history_data, customer_history_table, conn):
         customer_id = str(uuid.uuid4())
         customer_ids[item.get('email')] = customer_id  # Map email to customer_id
         
-        vip_tier_actions = item.get('vip_tier_actions_completed', {})
-        vip_tier_maintenance = item.get('vip_tier_maintenance_requirements', {})
-        vip_tier_upgrade = item.get('vip_tier_upgrade_requirements', {})
+        
 
         # Extract values from the JSON response, including nested properties
         customer_data = {
@@ -26,7 +24,7 @@ def save_customer_history(customer_history_data, customer_history_table, conn):
             'points_balance': item.get('points_balance'),
             'points_earned': item.get('points_earned'),
             'last_seen_at': item.get('last_seen_at'),
-            'third_party_id': item.get('third_party_id'),  # Note: changed from thirty_party_id
+            'third_party_id': item.get('third_party_id'),  
             'pos_account_id': item.get('pos_account_id'),
             'has_store_account': item.get('has_store_account'),
             'credit_balance': item.get('credit_balance'),

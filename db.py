@@ -7,7 +7,7 @@ engine = create_engine(DATABASE_URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 metadata = MetaData()
 
-# Define your tables
+# Define tables
 customer_history_table = Table(
     'customer_history', metadata,
     autoload_with=engine,

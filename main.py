@@ -16,12 +16,12 @@ from utils import save_customer_history, save_history_items
 
 load_dotenv()
 
-# Define your Yotpo API credentials
+# Define Yotpo API credentials
 YOTPO_GUID = os.getenv("YOTPO_GUID")
 YOTPO_API_KEY = os.getenv("YOTPO_API_KEY")
 YOTPO_BASE_URL = os.getenv("YOTPO_BASE_URL")
 
-# Initialize FastAPI
+
 app = FastAPI()
 
 @app.get("/customer_history")
@@ -72,7 +72,7 @@ def get_customer_history(per_page: int = 100, page_info: str = None):
 def get_history_items():
     try:
         # Fetch customer data from the database (customer_id and email)
-        with engine.connect() as conn:  # Create connection
+        with engine.connect() as conn:  
             result = conn.execute(select(customer_history_table.c.customer_id, customer_history_table.c.email)).mappings().all()
             customer_ids = {row['email']: row['customer_id'] for row in result}
         
@@ -95,7 +95,7 @@ def get_history_items():
                     'guid': YOTPO_GUID,
                     'api_key': YOTPO_API_KEY,
                     'customer_email': email,
-                    'with_history': 'true'  # Ensure you're asking for history
+                    'with_history': 'true'  #mandatory
                 }
             )
 
@@ -113,15 +113,15 @@ def get_history_items():
                     # Ensure the customer_id is correctly mapped
                     customer_id = customer_ids.get(email)
                     if customer_id:
-                        item['customer_id'] = customer_id  # Add customer_id to the history item
+                        item['customer_id'] = customer_id 
                         history_items_data.append(item)
 
         
 
         # Save history items to the database if found
         if history_items_data:
-            with engine.connect() as conn:  # Create connection to save history items
-                save_history_items(history_items_data, history_items_table, orders_table, conn)  # Save only history items
+            with engine.connect() as conn:  
+                save_history_items(history_items_data, history_items_table, orders_table, conn) 
                 print("History Items Data Saved Successfully")
         else:
             print("No History Items Found.")
@@ -136,7 +136,7 @@ def get_history_items():
     return {"status": "success"}
 
 
-# Start the FastAPI app
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8009)
